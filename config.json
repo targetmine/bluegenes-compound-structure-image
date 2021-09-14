@@ -1,0 +1,13 @@
+{
+  "accepts": ["id"],
+  "classes": ["Compound"],
+  "files" : {
+    "css" : "dist/style.css",
+    "js" : "dist/bundle.js"
+  },
+  "toolName" : {
+    "human" :"Compound Structure",
+    "cljs" :"bluegenesCompoundStructureImage"    
+  },
+  "version": 2
+}
