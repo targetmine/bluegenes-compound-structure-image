@@ -4,6 +4,10 @@
   "main": "src/index.js",
   "description": "",
   "homepage": "http://www.intermine.org",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:targetmine/bluegenes-compound-structure-image.git"
+  },
   "files": [
     "/dist",
     "/config.json",

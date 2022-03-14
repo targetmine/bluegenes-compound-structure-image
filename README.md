@@ -1,10 +1,11 @@
 #  Compound Structure
 
 Compound Structure is a tool made for [BlueGenes](http://bluegenes.apps.intermine.org) following BlueGenes Tool API.
-Add more description of your tool here! :)
+This tool retrieves compound structure images for the Compound class either from [ChEMBL web service](https://www.ebi.ac.uk/chembl/ws) or the [CACTUS web server](https://cactus.nci.nih.gov/).
 
-## Licence
+## License
 
+The MIT License - see [LICENSE](LICENSE)
 
 ### To set up locally for development
 

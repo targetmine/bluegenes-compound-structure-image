@@ -2,31 +2,47 @@
 // const SomePackage = require('PackageName');
 
 // make sure to export main, with the signature
-function main(el, service, imEntity, state, config, navigate) {
+function main(el, service, imEntity, state, config) {
 	if (!state) state = {};
 	if (!el || !service || !imEntity || !state || !config) {
 		throw new Error('Call main with correct signature');
 	}
-	// Tips to ensure your tool works correctly in BlueGenes:
-	// - The `el` element is all yours, but please do not manipulate the DOM above this
-	// - Avoid ambiguous query selectors that may end up returning an element not belonging to this tool
-	// - Avoid relying on element IDs, as multiple instances of this tool may be present on one page
 
-	/* Example - you can delete this and replace with your own code *******
+	let entity = Object.values(imEntity)[0];
 
-		// Sample code here to convert the provided InterMine object ID into the data the tool needs.
-		var entity = imEntity.Gene;
-		var mine = new imjs.Service(service);
-		mine.findById(entity.class, entity.value).then(function(obj) {
-			console.log(obj.name + ' is a ' + obj.class + ' you can find in ' + obj.organism.name);
-		});
-	*/
+	var query = {
+		from: entity.class,
+		select: ['identifier', 'inchiKey'],
+		where: [
+			{
+				path: 'id',
+				op: '=',
+				value: entity.value
+			}
+		]
+	};
+	new imjs.Service(service).records(query).then(function(response) {
+		let inchiKey = response[0].inchiKey;
 
-	el.innerHTML = `
-		<div class="rootContainer">
-			<h1>Your Data Viz Here</h1>
-		</div>
-	`;
+		let contents = '<div>Not available.</div>';
+		if (inchiKey) {
+			if (entity.class == 'ChemblCompound') {
+				contents =
+					'<div id="structureimage">' +
+					'<img src="https://www.ebi.ac.uk/chembl/api/data/image/' +
+					inchiKey +
+					'?dimensions=300&format=svg" onerror="document.getElementById(\'structureimage\').innerHTML = \'Not available.\'"/><br/><span style="font-size: 8px;">Provided by <a href="https://www.ebi.ac.uk/chembl/ws" target="_blank">ChEMBL web service</a></span></div>';
+			} else {
+				contents =
+					'<div id="structureimage">' +
+					'<img src="https://cactus.nci.nih.gov/chemical/structure/InChIKey=' +
+					inchiKey +
+					'/image" onerror="document.getElementById(\'structureimage\').innerHTML = \'Not available.\'"/><br/><span style="font-size: 8px;">Provided by <a href="https://cactus.nci.nih.gov/" target="_blank">The CACTUS web server</a></span></div>';
+			}
+		}
+
+		el.innerHTML = '<div class="rootContainer">' + contents + '</div>';
+	});
 }
 
 module.exports = { main };
